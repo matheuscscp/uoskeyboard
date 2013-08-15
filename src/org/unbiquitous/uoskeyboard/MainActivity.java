@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
@@ -36,7 +37,8 @@ public class MainActivity extends Activity {
       UosManager.stopUos();
   }
 
-  public void receiveRequest() {
+  public void receiveRequest(String application_name) {
+    ((TextView) findViewById(R.id.applicationName)).setText(application_name);
     setRequestVisibility(View.VISIBLE);
   }
   

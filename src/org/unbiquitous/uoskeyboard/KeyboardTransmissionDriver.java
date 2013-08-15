@@ -24,7 +24,9 @@ public class KeyboardTransmissionDriver implements UosDriver {
   public UpDriver getDriver() {
     UpDriver driver = new UpDriver("AndroidKeyboardDriver");
 
-    driver.addService("receiveRequest").addParameter("device_name", ParameterType.MANDATORY);
+    driver.addService("receiveRequest")
+      .addParameter("device_name", ParameterType.MANDATORY)
+      .addParameter("application_name", ParameterType.MANDATORY);
     driver.addService("stopTransmission").addParameter("device_name", ParameterType.MANDATORY);
     
     return driver;
@@ -48,7 +50,7 @@ public class KeyboardTransmissionDriver implements UosDriver {
 
   public void receiveRequest(ServiceCall serviceCall,
       ServiceResponse serviceResponse, UOSMessageContext messageContext) {
-    if (receiver_device != null || !UosManager.receiveRequest())
+    if (receiver_device != null || !UosManager.receiveRequest(serviceCall.getParameterString("application_name")))
       return;
     
     List<UpDevice> devices = gateway.listDevices();

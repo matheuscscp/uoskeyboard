@@ -54,10 +54,10 @@ public class UosManager {
     uos = null;
   }
   
-  public static boolean receiveRequest() {
+  public static boolean receiveRequest(String application_name) {
     if (main_activity == null)
       return false;
-    main_activity.receiveRequest();
+    main_activity.receiveRequest(application_name);
     return true;
   }
   
