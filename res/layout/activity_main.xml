@@ -35,9 +35,9 @@
 		    android:layout_below="@+id/textView3"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="20dp"
-		    android:onClick="onToggleClicked"
-		    android:textOff="uOS - OFF"
-		    android:textOn="uOS - ON" />
+		    android:onClick="toggleUos"
+		    android:textOff="uOS OFF"
+		    android:textOn="uOS ON" />
 
     <TextView
         android:id="@+id/textView1"

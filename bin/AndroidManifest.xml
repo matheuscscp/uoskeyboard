@@ -26,6 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name="org.unbiquitous.uoskeyboard.KeyboardActivity" >
+        </activity>
     </application>
 
 </manifest>

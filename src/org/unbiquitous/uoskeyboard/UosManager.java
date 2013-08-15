@@ -7,34 +7,27 @@ import org.unbiquitous.uos.network.socket.connectionManager.EthernetTCPConnectio
 
 public class UosManager {
   private static UOS uos = null;
-  
+
   private static MainActivity main_activity = null;
-  private static AndroidKeyboardDriver driver = null;
-  
-  public static MainActivity getMainActivity() {
-    return main_activity;
-  }
+  private static KeyboardActivity keyboard_activity = null;
+  private static KeyboardTransmissionDriver driver = null;
 
   public static void setMainActivity(MainActivity main_activity) {
     UosManager.main_activity = main_activity;
   }
-
-  public static AndroidKeyboardDriver getDriver() {
-    return driver;
+  
+  public static void setKeyboardActivity(KeyboardActivity keyboard_activity) {
+    UosManager.keyboard_activity = keyboard_activity;
   }
-
-  public static void setDriver(AndroidKeyboardDriver driver) {
+  
+  public static void setDriver(KeyboardTransmissionDriver driver) {
     UosManager.driver = driver;
   }
 
-  public static void toggle() {
-    if (uos == null)
-      start();
-    else
-      stop();
-  }
-  
-  private static void start() {
+  public static void startUos() {
+    if (uos != null)
+      return;
+    
     uos = new UOS();
     uos.init(new ListResourceBundle() {
       protected Object[][] getContents() {
@@ -44,15 +37,52 @@ public class UosManager {
             {"ubiquitos.eth.tcp.passivePortRange", "14985-15000"},
             {"ubiquitos.eth.udp.port", "15001"},
             {"ubiquitos.eth.udp.passivePortRange", "15002-15017"},
-            {"ubiquitos.driver.deploylist", AndroidKeyboardDriver.class.getName()}
+            {"ubiquitos.driver.deploylist", KeyboardTransmissionDriver.class.getName()}
         };
       }
     });
   }
   
-  private static void stop() {
+  public static void stopUos() {
+    if (uos == null)
+      return;
+    
+    if (driver != null)
+      driver.closeKeyboard();
     driver = null;
     uos.tearDown();
     uos = null;
+  }
+  
+  public static boolean receiveRequest() {
+    if (main_activity == null)
+      return false;
+    main_activity.receiveRequest();
+    return true;
+  }
+  
+  public static void stopTransmission() {
+    if (keyboard_activity != null)
+      keyboard_activity.stopTransmission();
+  }
+  
+  public static void acceptRequest() {
+    if (driver != null)
+      driver.acceptRequest();
+  }
+  
+  public static void cancelRequest() {
+    if (driver != null)
+      driver.cancelRequest();
+  }
+  
+  public static void broadcastKeyDown(int unicodeChar) {
+    if (driver != null)
+      driver.broadcastKeyDown(unicodeChar);
+  }
+
+  public static void broadcastKeyUp(int unicodeChar) {
+    if (driver != null)
+      driver.broadcastKeyUp(unicodeChar);
   }
 }
