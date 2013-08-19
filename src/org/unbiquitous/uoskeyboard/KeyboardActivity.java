@@ -1,5 +1,7 @@
 package org.unbiquitous.uoskeyboard;
 
+import org.unbiquitous.uoskeyboard.uos.UosManager;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

@@ -1,5 +1,7 @@
 package org.unbiquitous.uoskeyboard;
 
+import org.unbiquitous.uoskeyboard.uos.UosManager;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +42,10 @@ public class MainActivity extends Activity {
   public void receiveRequest(String application_name) {
     ((TextView) findViewById(R.id.applicationName)).setText(application_name);
     setRequestVisibility(View.VISIBLE);
+  }
+  
+  public void stopTransmission() {
+    setRequestVisibility(View.INVISIBLE);
   }
   
   public void acceptRequest(View view) {
