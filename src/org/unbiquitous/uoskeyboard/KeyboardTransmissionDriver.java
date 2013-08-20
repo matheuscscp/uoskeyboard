@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.unbiquitous.uos.core.adaptabitilyEngine.Gateway;
 import org.unbiquitous.uos.core.adaptabitilyEngine.ServiceCallException;
-import org.unbiquitous.uos.core.applicationManager.UOSMessageContext;
+import org.unbiquitous.uos.core.applicationManager.CallContext;
 import org.unbiquitous.uos.core.driverManager.DriverData;
 import org.unbiquitous.uos.core.driverManager.UosDriver;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpDevice;
@@ -52,7 +52,7 @@ public class KeyboardTransmissionDriver implements UosDriver {
   }
 
   public void receiveRequest(ServiceCall serviceCall,
-      ServiceResponse serviceResponse, UOSMessageContext messageContext) {
+      ServiceResponse serviceResponse, CallContext messageContext) {
     if (receiver_device != null || !KeyboardTransmissionDriverManager.receiveRequest(serviceCall.getParameterString("application_name")))
       return;
     

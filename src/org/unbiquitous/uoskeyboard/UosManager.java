@@ -3,7 +3,8 @@ package org.unbiquitous.uoskeyboard;
 import java.util.ListResourceBundle;
 
 import org.unbiquitous.uos.core.UOS;
-import org.unbiquitous.uos.network.socket.connectionManager.EthernetTCPConnectionManager;
+import org.unbiquitous.uos.network.socket.connectionManager.TCPConnectionManager;
+import org.unbiquitous.uos.network.socket.radar.PingRadar;
 
 public class UosManager {
   private static UOS uos = null;
@@ -27,7 +28,8 @@ public class UosManager {
     uos.init(new ListResourceBundle() {
       protected Object[][] getContents() {
         return new Object[][] {
-            {"ubiquitos.connectionManager", EthernetTCPConnectionManager.class.getName()},
+            {"ubiquitos.connectionManager", TCPConnectionManager.class.getName()},
+            {"ubiquitos.radar", PingRadar.class.getName()},
             {"ubiquitos.eth.tcp.port", "14984"},
             {"ubiquitos.eth.tcp.passivePortRange", "14985-15000"},
             {"ubiquitos.eth.udp.port", "15001"},
