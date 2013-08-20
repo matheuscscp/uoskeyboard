@@ -1,6 +1,6 @@
 package org.unbiquitous.uoskeyboard;
 
-import org.unbiquitous.uoskeyboard.uos.UosManager;
+import org.unbiquitous.uos.core.ClassLoaderUtils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
+  
+  private String application_name = null;
   
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -25,27 +27,36 @@ public class MainActivity extends Activity {
   }
 
   private void setRequestVisibility(int visibility) {
-    findViewById(R.id.textView1).setVisibility(visibility);
-    findViewById(R.id.applicationName).setVisibility(visibility);
-    findViewById(R.id.textView5).setVisibility(visibility);
-    findViewById(R.id.button1).setVisibility(visibility);
-    findViewById(R.id.Button01).setVisibility(visibility);
+    findViewById(R.id.application_name).setVisibility(visibility);
+    findViewById(R.id.reqkey).setVisibility(visibility);
+    findViewById(R.id.theapp).setVisibility(visibility);
+    findViewById(R.id.cancelbutton).setVisibility(visibility);
+    findViewById(R.id.acceptbutton).setVisibility(visibility);
   }
   
   public void toggleUos(View view) {
-    if (((ToggleButton) view).isChecked())
+    if (((ToggleButton) view).isChecked()) {
+      ClassLoaderUtils.builder = new ClassLoaderUtils.DefaultClassLoaderBuilder(){
+        public ClassLoader getParentClassLoader() {
+          return getClassLoader();
+        };
+      };
       UosManager.startUos();
+    }
     else
       UosManager.stopUos();
   }
 
   public void receiveRequest(String application_name) {
-    ((TextView) findViewById(R.id.applicationName)).setText(application_name);
-    setRequestVisibility(View.VISIBLE);
+    this.application_name = application_name;
   }
-  
-  public void stopTransmission() {
-    setRequestVisibility(View.INVISIBLE);
+
+  public void receiveRequest(View view) {
+    if (application_name != null) {
+      ((TextView) findViewById(R.id.application_name)).setText(application_name);
+      setRequestVisibility(View.VISIBLE);
+      application_name = null;
+    }
   }
   
   public void acceptRequest(View view) {

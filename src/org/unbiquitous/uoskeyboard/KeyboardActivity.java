@@ -1,6 +1,5 @@
 package org.unbiquitous.uoskeyboard;
 
-import org.unbiquitous.uoskeyboard.uos.UosManager;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,13 +20,11 @@ public class KeyboardActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_keyboard);
     
-    UosManager.setKeyboardActivity(this);
     imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     keyboard_view = findViewById(R.id.keyboard_view);
   }
 
   protected void onDestroy() {
-    UosManager.setKeyboardActivity(null);
     UosManager.stopUos();
   }
 
@@ -41,11 +38,6 @@ public class KeyboardActivity extends Activity {
       imm.showSoftInput(keyboard_view, InputMethodManager.SHOW_IMPLICIT);
     else
       imm.hideSoftInputFromWindow(keyboard_view.getWindowToken(), 0);
-  }
-  
-  public void stopTransmission() {
-    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-    startActivity(intent);
   }
   
   public boolean onKeyDown(int keyCode, KeyEvent event) {
