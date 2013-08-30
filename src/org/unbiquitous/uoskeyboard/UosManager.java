@@ -4,7 +4,7 @@ import java.util.ListResourceBundle;
 
 import org.unbiquitous.uos.core.UOS;
 import org.unbiquitous.uos.network.socket.connectionManager.TCPConnectionManager;
-import org.unbiquitous.uos.network.socket.radar.PingRadar;
+import org.unbiquitous.uos.network.socket.radar.MulticastRadar;
 
 public class UosManager {
   private static UOS uos = null;
@@ -29,7 +29,7 @@ public class UosManager {
       protected Object[][] getContents() {
         return new Object[][] {
             {"ubiquitos.connectionManager", TCPConnectionManager.class.getName()},
-            {"ubiquitos.radar", PingRadar.class.getName()},
+            //{"ubiquitos.radar", MulticastRadar.class.getName()},
             {"ubiquitos.eth.tcp.port", "14984"},
             {"ubiquitos.eth.tcp.passivePortRange", "14985-15000"},
             {"ubiquitos.eth.udp.port", "15001"},

@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
           return getClassLoader();
         };
       };
-      UosManager.startUos();
+      new UosStarter().execute();
     }
     else
       UosManager.stopUos();

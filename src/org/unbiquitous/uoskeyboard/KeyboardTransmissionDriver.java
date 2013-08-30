@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.unbiquitous.json.JSONException;
 import org.unbiquitous.uos.core.adaptabitilyEngine.Gateway;
 import org.unbiquitous.uos.core.adaptabitilyEngine.ServiceCallException;
 import org.unbiquitous.uos.core.applicationManager.CallContext;
-import org.unbiquitous.uos.core.driverManager.DriverData;
 import org.unbiquitous.uos.core.driverManager.UosDriver;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpDevice;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpDriver;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpService.ParameterType;
+import org.unbiquitous.uos.core.messageEngine.dataType.json.JSONDevice;
 import org.unbiquitous.uos.core.messageEngine.messages.ServiceCall;
 import org.unbiquitous.uos.core.messageEngine.messages.ServiceResponse;
 
@@ -23,14 +24,15 @@ public class KeyboardTransmissionDriver implements UosDriver {
   private Gateway gateway = null;
   private UpDevice receiver_device = null;
   private boolean transmitting = false;
+  private String current_device = null;
   
   @Override
   public UpDriver getDriver() {
     UpDriver driver = new UpDriver(TRANSMISSION_DRIVER);
 
     driver.addService("receiveRequest")
-      .addParameter("device_name", ParameterType.MANDATORY)
-      .addParameter("application_name", ParameterType.MANDATORY);
+    .addParameter("receiver_device", ParameterType.MANDATORY)
+    .addParameter("application_name", ParameterType.MANDATORY);
     
     return driver;
   }
@@ -44,6 +46,7 @@ public class KeyboardTransmissionDriver implements UosDriver {
   public void init(Gateway gateway, String instanceId) {
     this.gateway = gateway;
     KeyboardTransmissionDriverManager.setDriver(this);
+    current_device = gateway.getCurrentDevice().getName();
   }
 
   @Override
@@ -53,20 +56,15 @@ public class KeyboardTransmissionDriver implements UosDriver {
 
   public void receiveRequest(ServiceCall serviceCall,
       ServiceResponse serviceResponse, CallContext messageContext) {
-    if (receiver_device != null || !KeyboardTransmissionDriverManager.receiveRequest(serviceCall.getParameterString("application_name")))
+    if (transmitting || receiver_device != null || !KeyboardTransmissionDriverManager.receiveRequest(serviceCall.getParameterString("application_name")))
       return;
     
-    List<DriverData> drivers = gateway.listDrivers(RECEPTION_DRIVER);
-    String device_name = serviceCall.getParameterString("device_name");
-    
-    for (int i = 0; i < drivers.size(); ++i) {
-      UpDevice tmp = drivers.get(i).getDevice();
-      if (tmp.getName().equals(device_name)) {
-        receiver_device = tmp;
-        break;
-      }
+    try {
+      receiver_device = new JSONDevice(serviceCall.getParameter("receiver_device").toString()).getAsObject();
+    } catch (JSONException e) {
+      e.printStackTrace();
+      serviceResponse.setError(e.getMessage());
     }
-    transmitting = false;
   }
   
   public void acceptRequest() {
@@ -74,8 +72,10 @@ public class KeyboardTransmissionDriver implements UosDriver {
       return;
     
     transmitting = true;
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("transmitter_device", current_device);
     try {
-      gateway.callService(receiver_device, "requestAccepted", RECEPTION_DRIVER, null, null, new HashMap<String, Object>());
+      gateway.callService(receiver_device, "requestAccepted", RECEPTION_DRIVER, null, null, map);
     }
     catch (ServiceCallException e) {
       e.printStackTrace();
@@ -92,8 +92,10 @@ public class KeyboardTransmissionDriver implements UosDriver {
       return;
     
     transmitting = false;
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("transmitter_device", current_device);
     try {
-      gateway.callService(receiver_device, "keyboardClosed", RECEPTION_DRIVER, null, null, new HashMap<String, Object>());
+      gateway.callService(receiver_device, "keyboardClosed", RECEPTION_DRIVER, null, null, map);
     }
     catch (ServiceCallException e) {
       e.printStackTrace();
@@ -105,7 +107,8 @@ public class KeyboardTransmissionDriver implements UosDriver {
       return;
 
     HashMap<String, Object> map = new HashMap<String, Object>();
-    map.put("unicodeChar", Integer.valueOf(unicodeChar));
+    map.put("transmitter_device", current_device);
+    map.put("unicode_char", Integer.valueOf(unicodeChar));
     try {
       gateway.callService(receiver_device, "keyDown", RECEPTION_DRIVER, null, null, map);
     }
@@ -119,7 +122,8 @@ public class KeyboardTransmissionDriver implements UosDriver {
       return;
 
     HashMap<String, Object> map = new HashMap<String, Object>();
-    map.put("unicodeChar", Integer.valueOf(unicodeChar));
+    map.put("transmitter_device", current_device);
+    map.put("unicode_char", Integer.valueOf(unicodeChar));
     try {
       gateway.callService(receiver_device, "keyUp", RECEPTION_DRIVER, null, null, map);
     }
