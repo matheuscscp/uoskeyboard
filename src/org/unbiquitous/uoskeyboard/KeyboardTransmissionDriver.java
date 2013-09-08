@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.unbiquitous.json.JSONException;
+import org.unbiquitous.json.JSONObject;
 import org.unbiquitous.uos.core.adaptabitilyEngine.Gateway;
 import org.unbiquitous.uos.core.adaptabitilyEngine.ServiceCallException;
 import org.unbiquitous.uos.core.applicationManager.CallContext;
@@ -12,9 +13,8 @@ import org.unbiquitous.uos.core.driverManager.UosDriver;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpDevice;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpDriver;
 import org.unbiquitous.uos.core.messageEngine.dataType.UpService.ParameterType;
-import org.unbiquitous.uos.core.messageEngine.dataType.json.JSONDevice;
-import org.unbiquitous.uos.core.messageEngine.messages.ServiceCall;
-import org.unbiquitous.uos.core.messageEngine.messages.ServiceResponse;
+import org.unbiquitous.uos.core.messageEngine.messages.Call;
+import org.unbiquitous.uos.core.messageEngine.messages.Response;
 
 public class KeyboardTransmissionDriver implements UosDriver {
 
@@ -54,13 +54,13 @@ public class KeyboardTransmissionDriver implements UosDriver {
     KeyboardTransmissionDriverManager.setDriver(null);
   }
 
-  public void receiveRequest(ServiceCall serviceCall,
-      ServiceResponse serviceResponse, CallContext messageContext) {
+  public void receiveRequest(Call serviceCall,
+      Response serviceResponse, CallContext messageContext) {
     if (transmitting || receiver_device != null || !KeyboardTransmissionDriverManager.receiveRequest(serviceCall.getParameterString("application_name")))
       return;
     
     try {
-      receiver_device = new JSONDevice(serviceCall.getParameter("receiver_device").toString()).getAsObject();
+      receiver_device = UpDevice.fromJSON(new JSONObject(serviceCall.getParameterString("receiver_device")));
     } catch (JSONException e) {
       e.printStackTrace();
       serviceResponse.setError(e.getMessage());

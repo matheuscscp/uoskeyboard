@@ -4,7 +4,6 @@ import java.util.ListResourceBundle;
 
 import org.unbiquitous.uos.core.UOS;
 import org.unbiquitous.uos.network.socket.connectionManager.TCPConnectionManager;
-import org.unbiquitous.uos.network.socket.radar.MulticastRadar;
 
 public class UosManager {
   private static UOS uos = null;
