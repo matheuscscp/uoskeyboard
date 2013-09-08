@@ -63,7 +63,6 @@ public class KeyboardTransmissionDriver implements UosDriver {
       receiver_device = UpDevice.fromJSON(new JSONObject(serviceCall.getParameterString("receiver_device")));
     } catch (JSONException e) {
       e.printStackTrace();
-      serviceResponse.setError(e.getMessage());
     }
   }
   
