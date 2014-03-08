@@ -1,6 +1,5 @@
 package org.unbiquitous.uoskeyboard;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ public class KeyboardActivity extends Activity {
   private InputMethodManager imm = null;
   private View keyboard_view = null;
   
-  @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_keyboard);
@@ -25,7 +23,7 @@ public class KeyboardActivity extends Activity {
   }
 
   protected void onDestroy() {
-    UosManager.stopUos();
+    //Globals.stopUos();
   }
 
   public void exit(View view) {
@@ -41,12 +39,12 @@ public class KeyboardActivity extends Activity {
   }
   
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    UosManager.broadcastKeyDown(event.getUnicodeChar());
+    //Globals.broadcastKeyDown(event.getUnicodeChar());
     return true;
   }
   
   public boolean onKeyUp(int keyCode, KeyEvent event) {
-    UosManager.broadcastKeyUp(event.getUnicodeChar());
+    //Globals.broadcastKeyUp(event.getUnicodeChar());
     return true;
   }
   
