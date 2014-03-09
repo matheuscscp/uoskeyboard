@@ -15,10 +15,11 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
-  
-  private String applicationName = null;
-  private View[] requestViews = new View[5];
+  private TextView applicationName = null;
+  private View[] requestViews = new View[4];
   private UOS uos = null;
+  
+  public Boolean answer = null;
   
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -31,9 +32,9 @@ public class MainActivity extends Activity {
     };
     
     int i = 0;
-    requestViews[i++] = findViewById(R.id.application_name);
+    applicationName = (TextView)findViewById(R.id.application_name);
+    requestViews[i++] = applicationName;
     requestViews[i++] = findViewById(R.id.reqkey);
-    requestViews[i++] = findViewById(R.id.theapp);
     requestViews[i++] = findViewById(R.id.cancelbutton);
     requestViews[i++] = findViewById(R.id.acceptbutton);
     
@@ -60,7 +61,7 @@ public class MainActivity extends Activity {
           protected Object[][] getContents() {
             return new Object[][] {
               {"ubiquitos.connectionManager", TCPConnectionManager.class.getName()},
-              //{"ubiquitos.radar", MulticastRadar.class.getName()},
+              //{"ubiquitos.radar", MulticastRadar.class.getName()}, FIXME
               {"ubiquitos.eth.tcp.port", "14984"},
               {"ubiquitos.eth.tcp.passivePortRange", "14985-15000"},
               {"ubiquitos.eth.udp.port", "15001"},
@@ -81,26 +82,39 @@ public class MainActivity extends Activity {
     uos = null;
   }
   
-  public void receiveRequest(String application_name) {
-    this.applicationName = application_name;
-  }
-
-  public void receiveRequest(View view) {
-    if (applicationName != null) {
-      ((TextView) findViewById(R.id.application_name)).setText(applicationName);
-      for (View v : requestViews)
-        v.setVisibility(View.VISIBLE);
-      applicationName = null;
+  public void showRequest(final String displayTitle) {
+    applicationName.post(new Runnable() {
+      public void run() {
+        applicationName.setText(displayTitle);
+      }
+    });
+    for (final View v : requestViews) {
+      v.post(new Runnable() {
+        public void run() {
+          v.setVisibility(View.VISIBLE);
+        }
+      });
     }
   }
   
-  public void acceptRequest(View view) {
+  public void hideRequest() {
+    for (final View v : requestViews) {
+      v.post(new Runnable() {
+        public void run() {
+          v.setVisibility(View.INVISIBLE);
+        }
+      });
+    }
+  }
+  
+  public synchronized void acceptRequest(View view) {
+    answer = Boolean.TRUE;
     Intent intent = new Intent(getApplicationContext(), KeyboardActivity.class);
     startActivity(intent);
   }
-
-  public void cancelRequest(View view) {
-    for (View v : requestViews)
-      v.setVisibility(View.INVISIBLE);
+  
+  public synchronized void cancelRequest(View view) {
+    answer = Boolean.FALSE;
+    hideRequest();
   }
 }

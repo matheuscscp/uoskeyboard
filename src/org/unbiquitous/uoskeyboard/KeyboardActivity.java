@@ -10,7 +10,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ToggleButton;
 
 public class KeyboardActivity extends Activity {
-  
   private InputMethodManager imm = null;
   private View keyboard_view = null;
   
@@ -18,34 +17,34 @@ public class KeyboardActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_keyboard);
     
-    imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
     keyboard_view = findViewById(R.id.keyboard_view);
   }
-
-  protected void onDestroy() {
-    //Globals.stopUos();
+  
+  protected void onResume() {
+    super.onResume();
+    Globals.keyboardActivity = this;
   }
-
+  
+  protected void onPause() {
+    super.onResume();
+    Globals.keyboardActivity = null;
+  }
+  
   public void exit(View view) {
     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
     startActivity(intent);
   }
-
+  
   public void toggleKeyboard(View view) {
-    if (((ToggleButton) view).isChecked())
+    if (((ToggleButton)view).isChecked())
       imm.showSoftInput(keyboard_view, InputMethodManager.SHOW_IMPLICIT);
     else
       imm.hideSoftInputFromWindow(keyboard_view.getWindowToken(), 0);
   }
   
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    //Globals.broadcastKeyDown(event.getUnicodeChar());
+    Globals.keyboardDriver.notifyKeyEvent(event.getUnicodeChar());
     return true;
   }
-  
-  public boolean onKeyUp(int keyCode, KeyEvent event) {
-    //Globals.broadcastKeyUp(event.getUnicodeChar());
-    return true;
-  }
-  
 }

@@ -29,54 +29,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="46dp"
-        android:layout_alignTop="@+id/togglebutton"
-        android:layout_toRightOf="@+id/togglebutton"
-        android:onClick="receiveRequest"
-        android:text="Check" />
-
-    <ToggleButton
-        android:id="@+id/togglebutton"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_below="@+id/textView3"
-        android:layout_marginTop="22dp"
-        android:onClick="toggleUos"
-        android:textOff="uOS OFF"
-        android:textOn="uOS ON" />
-
-    <TextView
-        android:id="@+id/reqkey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/application_name"
-        android:layout_centerHorizontal="true"
-        android:text="requested the keyboard."
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <TextView
-        android:id="@+id/application_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/theapp"
-        android:layout_centerHorizontal="true"
-        android:text="X"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/theapp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:text="The application"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    <Button
         android:id="@+id/cancelbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -86,14 +38,43 @@
         android:onClick="cancelRequest"
         android:text="Cancel" />
 
+    <TextView
+        android:id="@+id/application_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/reqkey"
+        android:layout_centerHorizontal="true"
+        android:text="X"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <Button
         android:id="@+id/acceptbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/reqkey"
-        android:layout_marginTop="19dp"
+        android:layout_centerVertical="true"
         android:onClick="acceptRequest"
         android:text="Accept" />
+
+    <TextView
+        android:id="@+id/reqkey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cancelbutton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="requested the keyboard."
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ToggleButton
+        android:id="@+id/togglebutton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/application_name"
+        android:layout_alignRight="@+id/reqkey"
+        android:layout_marginBottom="16dp"
+        android:onClick="toggleUos"
+        android:textOff="uOS OFF"
+        android:textOn="uOS ON" />
 
 </RelativeLayout>
