@@ -16,7 +16,7 @@ import org.unbiquitous.uos.core.messageEngine.messages.Notify;
 import org.unbiquitous.uos.core.messageEngine.messages.Response;
 
 public class KeyboardDriver implements UosEventDriver {
-  public static final String KEYBOARD_DRIVER = "KeyboardDriver";
+  public static final String KEYBOARD_DRIVER = "KEYBOARD_DRIVER";
   public static final String REGISTER_DENIED = "REGISTER_DENIED";
   public static final String KEY_EVENT = "KEY_EVENT";
   
