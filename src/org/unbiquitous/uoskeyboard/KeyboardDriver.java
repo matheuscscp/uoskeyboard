@@ -84,7 +84,7 @@ public class KeyboardDriver implements UosEventDriver {
     if (clientDevice == null)
       return;
     try {
-      gateway.sendEventNotify(new Notify(KEY_EVENT, KEYBOARD_DRIVER) {{
+      gateway.notify(new Notify(KEY_EVENT, KEYBOARD_DRIVER) {{
         addParameter("unicodeChar", unicodeChar);
       }}, clientDevice);
     } catch (NotifyException e) {
