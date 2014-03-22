@@ -24,6 +24,7 @@ public class KeyboardDriver implements UosEventDriver {
   
   private Gateway gateway = null;
   private UpDevice clientDevice = null;
+  private String instanceId = null;
   
   public UpDriver getDriver() {
     UpDriver driver = new UpDriver(KEYBOARD_DRIVER);
@@ -41,6 +42,7 @@ public class KeyboardDriver implements UosEventDriver {
   
   public void init(Gateway gateway, InitialProperties properties, String instanceId) {
     this.gateway = gateway;
+    this.instanceId = instanceId;
     Globals.keyboardDriver = this;
   }
   
@@ -84,7 +86,7 @@ public class KeyboardDriver implements UosEventDriver {
     if (clientDevice == null)
       return;
     try {
-      gateway.notify(new Notify(KEY_EVENT, KEYBOARD_DRIVER) {{
+      gateway.notify(new Notify(KEY_EVENT, KEYBOARD_DRIVER, instanceId) {{
         addParameter("unicodeChar", unicodeChar);
       }}, clientDevice);
     } catch (NotifyException e) {
