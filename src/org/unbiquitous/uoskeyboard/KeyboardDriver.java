@@ -54,6 +54,7 @@ public class KeyboardDriver implements UosEventDriver {
       CallContext messageContext) {
     if (clientDevice != null)
       return;
+    clientDevice = messageContext.getCallerDevice();
     
     Globals.mainActivity.showRequest(serviceCall.getParameterString("displayTitle"));
     
@@ -67,10 +68,10 @@ public class KeyboardDriver implements UosEventDriver {
     
     Globals.mainActivity.hideRequest();
     
-    if (Globals.mainActivity.answer == null || Globals.mainActivity.answer.equals(false))
+    if (Globals.mainActivity.answer == null || Globals.mainActivity.answer.equals(false)) {
+      clientDevice = null;
       serviceResponse.setError(REGISTER_DENIED);
-    else
-      clientDevice = messageContext.getCallerDevice();
+    }
     
     Globals.mainActivity.answer = null;
   }
