@@ -44,7 +44,12 @@ public class KeyboardActivity extends Activity {
   }
   
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    Globals.keyboardDriver.notifyKeyEvent(event.getUnicodeChar());
+    Globals.keyboardDriver.notifyKeyDown(event.getUnicodeChar());
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+    }
+    Globals.keyboardDriver.notifyKeyUp(event.getUnicodeChar());
     return true;
   }
 }

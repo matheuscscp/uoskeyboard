@@ -18,7 +18,8 @@ import org.unbiquitous.uos.core.messageEngine.messages.Response;
 public class KeyboardDriver implements UosEventDriver {
   public static final String KEYBOARD_DRIVER = "KEYBOARD_DRIVER";
   public static final String REGISTER_DENIED = "REGISTER_DENIED";
-  public static final String KEY_EVENT = "KEY_EVENT";
+  public static final String EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+  public static final String EVENT_KEY_UP = "EVENT_KEY_UP";
   
   private static final int TIME_OUT = 10;
   
@@ -83,11 +84,23 @@ public class KeyboardDriver implements UosEventDriver {
     stopEvents();
   }
   
-  public void notifyKeyEvent(final int unicodeChar) {
+  public void notifyKeyDown(final int unicodeChar) {
     if (clientDevice == null)
       return;
     try {
-      gateway.notify(new Notify(KEY_EVENT, KEYBOARD_DRIVER, instanceId) {{
+      gateway.notify(new Notify(EVENT_KEY_DOWN, KEYBOARD_DRIVER, instanceId) {{
+        addParameter("unicodeChar", unicodeChar);
+      }}, clientDevice);
+    } catch (NotifyException e) {
+      stopEvents();
+    }
+  }
+  
+  public void notifyKeyUp(final int unicodeChar) {
+    if (clientDevice == null)
+      return;
+    try {
+      gateway.notify(new Notify(EVENT_KEY_UP, KEYBOARD_DRIVER, instanceId) {{
         addParameter("unicodeChar", unicodeChar);
       }}, clientDevice);
     } catch (NotifyException e) {
