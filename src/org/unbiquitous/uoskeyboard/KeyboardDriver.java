@@ -48,7 +48,7 @@ public class KeyboardDriver implements UosEventDriver {
   }
   
   public void destroy() {
-    // TODO
+    
   }
   
   public synchronized void registerListener(Call serviceCall, Response serviceResponse,
