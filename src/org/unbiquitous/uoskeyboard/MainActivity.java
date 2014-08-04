@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
     uos = new UOS();
     new AsyncTask<Void, Void, Void> () {
       protected Void doInBackground(Void... params) {
-        uos.init(new ListResourceBundle() {
+        uos.start(new ListResourceBundle() {
           protected Object[][] getContents() {
             return new Object[][] {
               {"ubiquitos.connectionManager", TCPConnectionManager.class.getName()},
@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
   private void stopUos() {
     if (uos == null)
       return;
-    uos.tearDown();
+    uos.stop();
     uos = null;
   }
   
